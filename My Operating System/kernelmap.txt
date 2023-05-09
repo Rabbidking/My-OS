@@ -1,0 +1,142 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+mbi                 0x4               console.o
+framebuffer         0x4               console.o
+buffer1             0x2000            file.o
+buffer              0x1000            kernelc.o
+d                   0x4               file.o
+file_table          0x60              file.o
+ino                 0x4               file.o
+buffer2             0x2000            file.o
+sb                  0x4               file.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000000400000                __image_base__ = 0x400000
+                0x0000000000000000                __dll__ = 0x0
+                0x0000000000400000                ___ImageBase = 0x400000
+                0x0000000000001000                __section_alignment__ = 0x1000
+                0x0000000000000200                __file_alignment__ = 0x200
+                0x0000000000000004                __major_os_version__ = 0x4
+                0x0000000000000000                __minor_os_version__ = 0x0
+                0x0000000000000001                __major_image_version__ = 0x1
+                0x0000000000000000                __minor_image_version__ = 0x0
+                0x0000000000000004                __major_subsystem_version__ = 0x4
+                0x0000000000000000                __minor_subsystem_version__ = 0x0
+                0x0000000000000003                __subsystem__ = 0x3
+                0x0000000000200000                __size_of_stack_reserve__ = 0x200000
+                0x0000000000001000                __size_of_stack_commit__ = 0x1000
+                0x0000000000100000                __size_of_heap_reserve__ = 0x100000
+                0x0000000000001000                __size_of_heap_commit__ = 0x1000
+                0x0000000000000000                __loader_flags__ = 0x0
+                0x0000000000000000                __dll_characteristics__ = 0x0
+                0x0000000000100000                . = 0x100000
+
+.text           0x0000000000100000     0xc200
+                0x0000000000100000                _textStart = .
+ *(.text)
+ .text          0x0000000000100000       0x58 kernelasm.o
+ .text          0x0000000000100058       0x78 kernelc.o
+                0x0000000000100058                clearBss
+                0x0000000000100072                kmain
+ .text          0x00000000001000d0     0x1570 console.o
+                0x0000000000100157                kprintf
+                0x0000000000100185                ksprintf
+                0x0000000000100cf4                kmemset
+                0x0000000000100d2c                kmemcopy
+                0x0000000000100d5f                kstrlen
+                0x0000000000100d87                kmemcmp
+                0x0000000000100de2                isBusy
+                0x0000000000100dfe                outb
+                0x0000000000100e1d                outw
+                0x0000000000100e3e                inb
+                0x0000000000100e5a                inw
+                0x0000000000100e77                disk_read_sector
+                0x0000000000100fc0                disk_write_sector
+                0x00000000001010f6                console_init
+                0x0000000000101112                set_pixel
+                0x00000000001011fb                console_draw_char
+                0x00000000001012da                console_draw_string
+                0x0000000000101316                scroll
+                0x00000000001013a0                console_putc
+ .text          0x0000000000101640      0x248 testsuite.o
+                0x0000000000101640                sweet
+ .text          0x0000000000101888      0x5f8 file.o
+                0x0000000000101888                init_filesystem
+                0x0000000000101896                disk_read_multi_sector
+                0x00000000001018f7                disk_read_block
+                0x0000000000101921                get_BGD
+                0x0000000000101959                print_block
+                0x0000000000101a3e                disk_read_inode
+                0x0000000000101ad6                disk_read_inode_table
+                0x0000000000101b1e                list_directory
+                0x0000000000101c5d                get_file_inode
+                0x0000000000101d6e                file_open
+                0x0000000000101e41                file_close
+ *(.rodata)
+ *(.rdata)
+ .rdata         0x0000000000101e80     0x21e0 console.o
+ .rdata         0x0000000000104060      0x120 testsuite.o
+ .rdata         0x0000000000104180       0x9c file.o
+ *(.rdata$zzz)
+ .rdata$zzz     0x000000000010421c       0x14 kernelc.o
+ .rdata$zzz     0x0000000000104230       0x14 console.o
+ .rdata$zzz     0x0000000000104244       0x14 testsuite.o
+ .rdata$zzz     0x0000000000104258       0x14 file.o
+                0x000000000010426c                _textEnd = .
+                0x0000000000105000                . = ALIGN (ABSOLUTE (.), 0x1000)
+ *fill*         0x000000000010426c      0xd94 
+                0x0000000000105000                _dataStart = .
+ *(.data)
+ .data          0x0000000000105000        0x0 kernelc.o
+ .data          0x0000000000105000        0x0 console.o
+ .data          0x0000000000105000        0x0 testsuite.o
+ .data          0x0000000000105000        0x0 file.o
+                0x0000000000105000                _dataEnd = .
+                0x0000000000105000                _bssStart = .
+ *(COMMON)
+ COMMON         0x0000000000105000     0x1000 kernelc.o
+                0x0000000000105000                buffer
+ COMMON         0x0000000000106000        0x8 console.o
+                0x0000000000106000                mbi
+                0x0000000000106004                framebuffer
+ *fill*         0x0000000000106008       0x18 
+ COMMON         0x0000000000106020     0x40a4 file.o
+                0x0000000000106020                buffer1
+                0x0000000000108020                d
+                0x0000000000108040                file_table
+                0x00000000001080a0                ino
+                0x00000000001080c0                buffer2
+                0x000000000010a0c0                sb
+ *(.bss)
+ .bss           0x000000000010a0c4     0x1000 kernelasm.o
+ .bss           0x000000000010b0c4        0x0 kernelc.o
+ .bss           0x000000000010b0c4        0x8 console.o
+                0x000000000010b0c4                cc
+                0x000000000010b0c8                cr
+ .bss           0x000000000010b0cc        0x0 testsuite.o
+ *fill*         0x000000000010b0cc       0x14 
+ .bss           0x000000000010b0e0     0x1000 file.o
+                0x000000000010c0e0                _bssEnd = .
+
+.drectve        0x000000000010d000      0x200
+ .drectve       0x000000000010d000       0x18 kernelc.o
+ .drectve       0x000000000010d018       0x30 console.o
+ .drectve       0x000000000010d048       0x84 file.o
+
+/DISCARD/
+ *(.eh_frame)
+ *(.comment)
+LOAD kernelasm.o
+LOAD kernelc.o
+LOAD console.o
+LOAD testsuite.o
+LOAD file.o
+OUTPUT(kernel.tmp pei-i386)
